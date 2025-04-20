@@ -24,9 +24,13 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::prefix('site2')->controller(SiteOneController::class)->group(function() {
-    Route::get('/home','home');
-    Route::get('/about','about');
-    Route::get('/contact','contact');
-    Route::get('/msg/{id}','msg');
+Route::prefix('site2')->name('site2.')->controller(SiteOneController::class)->group(function () {
+    Route::get('/home', 'home')->name('home');
+    Route::get('/services', 'services')->name('services');
+    Route::get('/portfolio', 'portfolio')->name('portfolio');
+    Route::get('/about', 'about')->name('about');
+    Route::get('/contact', 'contact')->name('contact');
+    Route::get('/ok', 'ok')->name('ok');
+    Route::post('/contact', 'postcontact')->name('postcontact');
+    Route::get('/viewcontact', 'viewcontact')->name('viewcontact');
 });

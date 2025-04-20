@@ -3,20 +3,65 @@
 namespace App\Http\Controllers\SiteOne;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class SiteOneController extends Controller
 {
-    function home () {
-        echo '<h1>home</h1>';
+    public function home()
+    {
+        return view('SiteOne.home');
     }
-    function about () {
-        echo '<h1>about</h1>';
+    public function services()
+    {
+        return view('SiteOne.services');
     }
-    function contact () {
-        echo '<h1>contact</h1>';
+    public function portfolio()
+    {
+        return view('SiteOne.portfolio');
     }
-    function msg ($id) {
-        return view('SiteOne.msg')->with('id', $id);
+    public function about()
+    {
+        return view('SiteOne.about');
+    }
+    public function contact()
+    {
+        return view('SiteOne.contact');
+    }
+    public function ok()
+    {
+        return view('SiteOne.ok');
+    }
+    public function viewcontact()
+    {
+        $contacts = Contact::all();
+        return view('SiteOne.view_contact', compact('contacts'));
+    }
+    public function postcontact(Request $request)
+    {
+        //    dd($request->all());
+        $request -> validate([
+            'name' => 'required|string|min:3|max:15',
+            'email' => 'required',
+            'phone' => 'required',
+            'msg' => 'required',
+            'image' => 'required'
+        ]);
+
+        // $name =  time() . '_' . rand() . '_'. $request->file('image')->getClientOriginalName();
+
+        $name = 'SiteOne_' . time() . '_' . rand() . '.' . $request->file('image')->getClientOriginalExtension();
+
+        $request->file('image')->move(public_path('uploads'), $name);
+
+        Contact::create([
+            'name'=> $request->name,
+            'phone'=> $request->phone,
+            'email'=> $request->email,
+            'msg'=> $request->msg,
+            'image'=> $name
+        ]);
+
+        return redirect()->route('site2.ok');
     }
 }
